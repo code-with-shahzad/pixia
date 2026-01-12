@@ -8,7 +8,7 @@ import { ChatScreen } from '../screens/ChatScreen';
 import { ProfileScreen } from '../screens/ProfileScreen';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const Stack = createStackNavigator();
@@ -37,6 +37,7 @@ function MainStack() {
             drawerType: 'slide',
             overlayColor: 'rgba(0,0,0,0.5)',
             swipeEdgeWidth: 100,
+            drawerStyle: { width: '75%' },
         }}
     >
       <Drawer.Screen name="Chat" component={ChatScreen} />
@@ -47,7 +48,7 @@ function MainStack() {
 
 export const AppNavigator = () => {
   const { session, loading } = useAuth();
-  const { theme } = useTheme();
+  const { theme, isDark } = useTheme();
 
   if (loading) {
       return (
@@ -58,6 +59,12 @@ export const AppNavigator = () => {
   }
 
   return (
-     session ? <MainStack /> : <AuthStack />
+     <>
+        <StatusBar 
+            barStyle={isDark ? 'light-content' : 'dark-content'} 
+            backgroundColor={theme.colors.background} 
+        />
+        {session ? <MainStack /> : <AuthStack />}
+     </>
   );
 };

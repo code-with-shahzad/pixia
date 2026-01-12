@@ -5,10 +5,12 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const CustomDrawer = (props: any) => {
   const { session } = useAuth();
   const { theme, isDark, toggleTheme } = useTheme();
+  const inset = useSafeAreaInsets()
   const navigation = useNavigation<any>();
 
   const handleSignOut = async () => {
@@ -23,7 +25,7 @@ export const CustomDrawer = (props: any) => {
     <View style={{ flex: 1, backgroundColor: theme.colors.surface }}>
       <DrawerContentScrollView {...props} contentContainerStyle={{ paddingTop: 0 }}>
         {/* Header / New Chat */}
-        <View style={[styles.header, { borderBottomColor: theme.colors.border }]}>
+        <View style={[styles.header, { borderBottomColor: theme.colors.border, paddingTop: inset.top + 20 }]}>
              <TouchableOpacity style={[styles.newChatBtn, { backgroundColor: theme.colors.primary }]} onPress={() => navigation.navigate('Chat')}>
                  <Icon name="add" size={20} color="#fff" />
                  <Text style={[styles.newChatText, { color: '#fff' }]}>New Chat</Text>
@@ -61,7 +63,6 @@ export const CustomDrawer = (props: any) => {
 const styles = StyleSheet.create({
   header: {
     padding: 16,
-    paddingTop: 50, // Safe area
     borderBottomWidth: 1,
   },
   newChatBtn: {
